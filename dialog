@@ -1,0 +1,74 @@
+#!/usr/bin/php
+<?php
+
+// configuration
+$voices = array(
+    'default'  => 'Samantha',
+    'samantha' => 'Samantha',
+    'tom'      => 'Tom',
+    'sinji'    => 'Sin-Ji',
+    'yaling'   => 'Ya-Ling',
+    'lingling' => 'LingLing',
+);
+$saveLocation  = '~/Downloads';
+
+// init
+$argv = $_SERVER['argv'];
+if (sizeof($argv) < 2) {
+    echo "Script to speech is required.\n";
+    exit(1);
+}
+$save = in_array('save', $argv);
+
+// get script filename
+if (!file_exists($scriptName = $argv[1])) {
+    echo "Script file ({$scriptName}) is not exists.\n";
+    exit(1);
+}
+
+// get sentences in script file
+$sentences  = array();
+$fileHandle = fopen($scriptName, 'r');
+while (!feof($fileHandle)) {
+    if (($line = trim(fgets($fileHandle)))) {
+        if (($intSpd = strpos($line, ':'))
+         && ($voice  = @$voices[strtolower(trim(substr($line, 0, $intSpd)))])) {
+            $content = trim(substr($line,  ++$intSpd));
+        } else {
+            $voice   = $voices['default'];
+            $content = $line;
+        }
+        if ($voice && $content) {
+            $sentences[] = array(
+                'voice'   => $voice,
+                'content' => $content,
+            );
+        }
+    }
+}
+fclose($fileHandle);
+
+// speech!
+if ($save) {
+    $exArgs = " -o ";
+} else {
+    $exArgs = '';
+}
+$opFiles    = array();
+foreach ($sentences as $i => $sentence) {
+    echo "{$sentence['voice']}: {$sentence['content']}\n";
+    if ($save) {
+        $index  = $i + 1;
+        $opFiles[] = $opFile = "{$saveLocation}/speech_{$index}.aiff";
+        $curArg = "{$exArgs}{$opFile}";
+    } else {
+        $curArg = '';
+    }
+    shell_exec("say -v '{$sentence['voice']}' '{$sentence['content']}' {$curArg}");
+}
+
+// mix down and output
+if ($save) {
+    $opFiles = implode(' ', $opFiles);
+    shell_exec("cat {$opFiles} > {$saveLocation}/mixed.aiff");
+}
