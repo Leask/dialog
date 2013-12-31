@@ -70,5 +70,6 @@ foreach ($sentences as $i => $sentence) {
 // mix down and output
 if ($save) {
     $opFiles = implode(' ', $opFiles);
-    shell_exec("cat {$opFiles} > {$saveLocation}/mixed.aiff");
+    shell_exec("sox {$opFiles} {$saveLocation}/mixed.aiff");
+    shell_exec("lame -h {$saveLocation}/mixed.aiff {$saveLocation}/mixed.mp3");
 }
