@@ -5,7 +5,7 @@ The easy way to make audio dialogs demo for English teaching.
 
 ![Cover](https://raw.github.com/Leask/dialog/master/images/cover.jpg "Cover")
 
-This project was initially created for my girl friend who is a English teacher.
+This project was initially created for my girl friend who is an English teacher.
 
 For OS X currently.
 
