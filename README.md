@@ -9,11 +9,12 @@ This project was initially created for my girl friend who is a English teacher.
 
 For OS X currently.
 
+
 ## How to Use?
 
 ![Dialog](https://raw.github.com/Leask/dialog/master/images/dialog.jpg "Dialog")
 
-- Prepare the script
+* Prepare the script
     <pre>
     $ cat script.txt
     Samantha: Hello!
@@ -21,11 +22,11 @@ For OS X currently.
     Samantha: My name is Han Meimei. What is your name?
     Tom: My name is Li Lei.
     </pre>
-- Test audio dialog
+* Test audio dialog
     <pre>
     $ dialog script.txt
     </pre>
-- Make audio dialog file
+* Make audio dialog file
     <pre>
     $ dialog script.txt save
     </pre>
@@ -34,3 +35,15 @@ For OS X currently.
 ## Demo
 
 ![Screenshot](https://raw.github.com/Leask/dialog/master/images/screenshot.jpg "Screenshot")
+
+
+## Dependences
+
+* PHP
+* SoX
+* LAME
+
+
+## Get Help
+
+* Email/iMessage/Hangouts: i@leaskh.com
