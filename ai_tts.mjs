@@ -1,11 +1,16 @@
-import { speech } from 'utilitas'
-import fs from 'fs/promises'
+import ffmpegInstaller from '@ffmpeg-installer/ffmpeg';
+import audioconcat from 'audioconcat';
+import ffmpeg from 'fluent-ffmpeg';
+import { speech } from 'utilitas';
+import config from './config.mjs';
 
 await speech.init({
     provider: 'OPENAI',
-    apiKey: '',
+    apiKey: config.openAiToken,
     tts: true,
 });
+
+ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 
 const scripts = [
     ["alloy", "Two people are meeting at the party."],
@@ -21,7 +26,9 @@ const scripts = [
     ["onyx", "It's nice to meet you, too! Talk to you later."],
 ];
 
-const str = 'Hello, this is a test.';
+const output = '/Users/leask/Desktop/output.mp3';
+
+const arrResult = [];
 
 for (let i in scripts) {
     const result = await speech.tts(scripts[i][1], {
@@ -32,6 +39,19 @@ for (let i in scripts) {
             speed: 0.8,
         },
     });
-    await fs.rename(result, `/Users/leask/Desktop/${i}.mp3`);
+    arrResult.push(result);
     console.log(`${i}/${scripts.length}`, result);
 }
+
+audioconcat(arrResult)
+    .concat(output)
+    .on('start', function(command) {
+        console.log('FFmpeg process started:', command);
+    })
+    .on('error', function(err, stdout, stderr) {
+        console.error('Error:', err);
+        console.error('FFmpeg stderr:', stderr);
+    })
+    .on('end', function(output) {
+        console.log('Audio created in:', output);
+    });

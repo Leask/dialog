@@ -1,4 +1,0 @@
-Samantha: Hello!
-Tom: Hello!
-Samantha: My name is Han Meimei. What is your name?
-Tom: My name is Li Lei.
